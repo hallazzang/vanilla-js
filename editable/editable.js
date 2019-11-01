@@ -4,19 +4,24 @@
   function editable(options) {
     const { table, dataSource, columns } = options;
 
+    table.classList.add('editable__table');
+
     // setup thead
     let oldTableHead = table.tHead;
     if (!oldTableHead) {
       oldTableHead = table.createTHead();
     }
+
     const newTableHead = document.createElement('thead');
     const tr = document.createElement('tr');
     columns.forEach(column => {
       const th = document.createElement('th');
+      th.classList.add('editable__header');
       th.textContent = column.label;
       tr.appendChild(th);
     });
     newTableHead.appendChild(tr);
+
     table.replaceChild(newTableHead, oldTableHead);
 
     // setup tbody
@@ -24,16 +29,65 @@
     if (!oldTableBody) {
       oldTableBody = table.createTBody();
     }
+
     const newTableBody = document.createElement('tbody');
     dataSource.forEach(item => {
       const tr = document.createElement('tr');
       columns.forEach(column => {
+        const { label, key, editable = true } = column;
+
         const td = document.createElement('td');
-        td.textContent = item[column.key];
+        td.classList.add('editable__cell');
+        td.textContent = item[key];
+
+        if (editable) {
+          let editing = false,
+            originalValue;
+
+          function startEditing() {
+            editing = true;
+            originalValue = td.textContent;
+            td.classList.add('editable__cell_editing');
+            td.contentEditable = true;
+            td.focus();
+          }
+
+          function endEditing(cancel = false) {
+            editing = false;
+            if (cancel) {
+              td.textContent = originalValue;
+            }
+            td.classList.remove('editable__cell_editing');
+            td.contentEditable = false;
+            td.blur();
+          }
+
+          td.ondblclick = () => startEditing();
+
+          td.onblur = () => {
+            if (editing) {
+              endEditing(true);
+            }
+          };
+
+          td.onkeydown = e => {
+            if (e.key === 'Enter') {
+              if (editing) {
+                endEditing();
+              }
+            } else if (e.key === 'Escape') {
+              if (editing) {
+                endEditing(true);
+              }
+            }
+          };
+        }
+
         tr.appendChild(td);
       });
       newTableBody.appendChild(tr);
     });
+
     table.replaceChild(newTableBody, oldTableBody);
   }
 
