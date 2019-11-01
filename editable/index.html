@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>EdiTable</title>
+    <link rel="stylesheet" href="editable.css">
+  </head>
+  <body>
+    <h1>EdiTable</h1>
+    <p>Editable Table implemented in vanilla JS.</p>
+    <table id="editable"></table>
+    <script src="editable.js"></script>
+    <script>
+      const dataSource = [
+        { id: 1, name: 'John', age: 12 },
+        { id: 2, name: 'Anne', age: 24 },
+        { id: 3, name: 'Frank', age: 31 },
+      ];
+
+      const columns = [
+        { label: 'ID', key: 'id', editable: false },
+        { label: 'Name', key: 'name' },
+        { label: 'Age', key: 'age' },
+      ];
+
+      editable({
+        table: document.getElementById('editable'),
+        dataSource,
+        columns,
+      });
+    </script>
+  </body>
+</html>
