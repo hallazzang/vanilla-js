@@ -1,0 +1,19 @@
+.editable__table {
+  border-collapse: collapse;
+}
+
+.editable__cell_header,
+.editable__cell {
+  padding: 6px 8px;
+  border: 1px solid #333;
+}
+
+.editable__cell_header {
+  background-color: #111;
+  color: #fff;
+}
+
+.editable__cell[contenteditable='true'] {
+  box-shadow: inset 0 0 3px 2px #777;
+  outline: none;
+}
