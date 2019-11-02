@@ -62,8 +62,8 @@
             originalValue = td.textContent;
             td.classList.add('editable__cell_editing');
             td.contentEditable = true;
-            td.focus();
             selectContent();
+            td.focus();
           }
 
           function validate() {
