@@ -16,7 +16,7 @@
     const tr = document.createElement('tr');
     columns.forEach(column => {
       const th = document.createElement('th');
-      th.classList.add('editable__header');
+      th.classList.add('editable__cell_header');
       th.textContent = column.label;
       tr.appendChild(th);
     });
@@ -34,7 +34,7 @@
     dataSource.forEach(item => {
       const tr = document.createElement('tr');
       columns.forEach(column => {
-        const { label, key, editable = true } = column;
+        const { key, editable = true } = column;
 
         const td = document.createElement('td');
         td.classList.add('editable__cell');
