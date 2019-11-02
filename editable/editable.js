@@ -34,7 +34,7 @@
     dataSource.forEach(item => {
       const tr = document.createElement('tr');
       columns.forEach(column => {
-        const { key, editable = true } = column;
+        const { key, validator, editable = true } = column;
 
         const td = document.createElement('td');
         td.classList.add('editable__cell');
@@ -43,6 +43,7 @@
         if (editable) {
           let editing = false;
           let originalValue;
+          let validatedValue;
 
           function selectContent() {
             const selection = getSelection();
@@ -50,6 +51,10 @@
             range.selectNodeContents(td);
             selection.removeAllRanges();
             selection.addRange(range);
+          }
+
+          function unselectContent() {
+            getSelection().removeAllRanges();
           }
 
           function startEditing() {
@@ -61,17 +66,36 @@
             selectContent();
           }
 
+          function validate() {
+            validatedValue = validator(td.textContent);
+
+            if (validatedValue == null) {
+              td.classList.add('editable__cell_error');
+            } else {
+              td.classList.remove('editable__cell_error');
+            }
+          }
+
           function endEditing(cancel = false) {
-            editing = false;
             if (cancel) {
               td.textContent = originalValue;
+              td.classList.remove('editable__cell_error');
+              unselectContent();
+            } else {
+              if (validatedValue === null) {
+                return;
+              }
+              item[key] = validatedValue;
             }
+            editing = false;
             td.classList.remove('editable__cell_editing');
             td.contentEditable = false;
             td.blur();
           }
 
           td.ondblclick = () => startEditing();
+
+          td.oninput = () => validate();
 
           td.onblur = () => {
             if (editing) {
@@ -82,10 +106,12 @@
           td.onkeydown = e => {
             if (e.key === 'Enter') {
               if (editing) {
+                e.preventDefault();
                 endEditing();
               }
             } else if (e.key === 'Escape') {
               if (editing) {
+                e.preventDefault();
                 endEditing(true);
               }
             }
