@@ -41,8 +41,16 @@
         td.textContent = item[key];
 
         if (editable) {
-          let editing = false,
-            originalValue;
+          let editing = false;
+          let originalValue;
+
+          function selectContent() {
+            const selection = getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(td);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
 
           function startEditing() {
             editing = true;
@@ -50,6 +58,7 @@
             td.classList.add('editable__cell_editing');
             td.contentEditable = true;
             td.focus();
+            selectContent();
           }
 
           function endEditing(cancel = false) {
