@@ -17,6 +17,10 @@
         margin: 0 auto;
         padding: 1rem;
       }
+
+      .data-viewer {
+        white-space: pre-wrap;
+      }
     </style>
   </head>
   <body>
@@ -25,7 +29,8 @@
       <p>Editable Table implemented in vanilla JS.</p>
       <p>Double-click the <b>Name</b> and <b>Age</b> cell in the table below.</p>
       <table id="editable"></table>
-      <pre><code id="dataSource"></code></pre>
+      <p>Data:</p>
+      <pre class="data-viewer"><code id="dataSource"></code></pre>
     </div>
 
     <script src="editable.js"></script>
@@ -63,7 +68,7 @@
       });
 
       setInterval(() => {
-        document.getElementById('dataSource').textContent = JSON.stringify(dataSource);
+        document.getElementById('dataSource').textContent = JSON.stringify(dataSource, null, 2);
       }, 100);
     </script>
   </body>
