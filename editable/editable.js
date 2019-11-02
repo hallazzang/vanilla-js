@@ -60,6 +60,7 @@
           function startEditing() {
             editing = true;
             originalValue = td.textContent;
+            validate();
             td.classList.add('editable__cell_editing');
             td.contentEditable = true;
             td.focus();
@@ -85,7 +86,6 @@
             if (cancel) {
               td.textContent = originalValue;
               td.classList.remove('editable__cell_error');
-              unselectContent();
             } else {
               if (validatedValue === null) {
                 return;
@@ -96,6 +96,7 @@
             td.classList.remove('editable__cell_editing');
             td.contentEditable = false;
             td.blur();
+            unselectContent();
           }
 
           td.ondblclick = () => startEditing();
