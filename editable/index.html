@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>EdiTable</title>
     <link rel="stylesheet" href="editable.css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+    </style>
   </head>
   <body>
-    <h1>EdiTable</h1>
-    <p>Editable Table implemented in vanilla JS.</p>
-    <p>Double-click the <b>Name</b> and <b>Age</b> cell in the table below.</p>
-    <table id="editable"></table>
+    <div class="container">
+      <h1>EdiTable</h1>
+      <p>Editable Table implemented in vanilla JS.</p>
+      <p>Double-click the <b>Name</b> and <b>Age</b> cell in the table below.</p>
+      <table id="editable"></table>
+    </div>
 
     <script src="editable.js"></script>
     <script>
