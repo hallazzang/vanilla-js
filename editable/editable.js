@@ -67,6 +67,11 @@
           }
 
           function validate() {
+            if (!validator) {
+              validatedValue = td.textContent;
+              return;
+            }
+
             validatedValue = validator(td.textContent);
 
             if (validatedValue == null) {
