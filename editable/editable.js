@@ -93,6 +93,7 @@
               item[key] = validatedValue;
             }
             editing = false;
+            td.textContent = validatedValue;
             td.classList.remove('editable__cell_editing');
             td.contentEditable = false;
             td.blur();
