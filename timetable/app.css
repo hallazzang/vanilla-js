@@ -1,0 +1,41 @@
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+}
+
+.lecture-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.lectures {
+  margin: 0;
+  margin-top: 0.5rem;
+  padding: 0;
+  list-style: none;
+  overflow-y: scroll;
+}
+
+.lectures__item-container {
+  padding: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+}
+
+.lectures__item-name {
+  font-weight: 600;
+}
+
+.timetable {
+  display: flex;
+}
