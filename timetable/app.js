@@ -74,6 +74,7 @@
 
     const timetable = document.createElement('div');
     timetable.classList.add('timetable');
+
     ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].forEach((weekday, i) => {
       const weekdayHeader = document.createElement('span');
       weekdayHeader.classList.add('timetable__weekday-header');
@@ -83,7 +84,16 @@
         gridRow: 1,
       });
       timetable.appendChild(weekdayHeader);
+
+      const weekdayTrack = document.createElement('div');
+      weekdayTrack.classList.add('timetable__weekday-track');
+      Object.assign(weekdayTrack.style, {
+        gridColumn: i + 2,
+        gridRow: '2 / -1',
+      });
+      timetable.appendChild(weekdayTrack);
     });
+
     [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].forEach(
       (hour, i) => {
         const hourHeader = document.createElement('span');
@@ -96,6 +106,7 @@
         timetable.appendChild(hourHeader);
       }
     );
+
     container.appendChild(timetable);
 
     return container;
