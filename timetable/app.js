@@ -74,6 +74,28 @@
 
     const timetable = document.createElement('div');
     timetable.classList.add('timetable');
+    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].forEach((weekday, i) => {
+      const weekdayHeader = document.createElement('span');
+      weekdayHeader.classList.add('timetable__weekday-header');
+      weekdayHeader.textContent = weekday;
+      Object.assign(weekdayHeader.style, {
+        gridColumn: i + 2,
+        gridRow: 1,
+      });
+      timetable.appendChild(weekdayHeader);
+    });
+    [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].forEach(
+      (hour, i) => {
+        const hourHeader = document.createElement('span');
+        hourHeader.classList.add('timetable__hour-header');
+        hourHeader.textContent = `${String(hour).padStart(2, '0')}:00`;
+        Object.assign(hourHeader.style, {
+          gridColumn: 1,
+          gridRow: i + 2,
+        });
+        timetable.appendChild(hourHeader);
+      }
+    );
     container.appendChild(timetable);
 
     return container;
