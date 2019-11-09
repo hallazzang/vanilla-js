@@ -48,3 +48,11 @@ body {
   grid-template-columns: 4rem repeat(5, 1fr);
   grid-template-rows: 2rem repeat(14, 1fr);
 }
+
+.timetable__weekday-header,
+.timetable__hour-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
