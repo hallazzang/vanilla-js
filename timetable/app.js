@@ -1,76 +1,141 @@
 (() => {
   const global = this;
 
-  const lectures = [
-    {
-      id: 1,
-      name: 'Lecture 1',
-      times: [
-        { weekday: 1, beginAt: '09:00', endAt: '11:30' },
-        { weekday: 4, beginAt: '12:30', endAt: '14:30' },
-      ],
-    },
-  ];
+  const data = {
+    lectures: [
+      {
+        id: 1,
+        name: 'Lecture 1',
+        times: [
+          { weekday: 0, beginAt: '09:00', endAt: '11:30' },
+          { weekday: 3, beginAt: '12:30', endAt: '14:30' },
+        ],
+      },
+    ],
+    selectedLectures: new Set(),
+    searchInputRef: undefined,
+    searchResultListRef: undefined,
+    weekdayTrackRefs: [],
+  };
 
-  function renderLectureItem(lecture) {
+  function parseTime(s) {
+    const [hour, minute] = s.split(':').map(Number);
+
+    return hour * 60 + minute;
+  }
+
+  function renderSearchResultList() {
+    const query = data.searchInputRef.value.trim();
+
+    while (data.searchResultListRef.lastChild) {
+      data.searchResultListRef.removeChild(data.searchResultListRef.lastChild);
+    }
+
+    data.lectures
+      .filter(lecture =>
+        lecture.name.toLowerCase().includes(query.toLowerCase())
+      )
+      .forEach(lecture =>
+        data.searchResultListRef.appendChild(createSearchResult(lecture))
+      );
+  }
+
+  function createSearchResult(lecture) {
     const item = document.createElement('li');
-    item.classList.add('lectures__item');
+    item.classList.add('search__result-item');
 
     const container = document.createElement('div');
-    container.classList.add('lectures__item-container');
+    container.classList.add('search__result-item__container');
 
     const lectureName = document.createElement('span');
-    lectureName.classList.add('lectures__item-name');
+    lectureName.classList.add('search__result-item__name');
     lectureName.textContent = lecture.name;
     container.appendChild(lectureName);
 
     const lectureTimes = document.createElement('span');
-    lectureTimes.classList.add('lectures__item-times');
+    lectureTimes.classList.add('search__result-item__times');
     lectureTimes.textContent = '-';
     container.appendChild(lectureTimes);
 
     item.appendChild(container);
+    item.onclick = () => {
+      if (!data.selectedLectures.has(lecture.id)) {
+        data.selectedLectures.add(lecture.id);
+      } else {
+        data.selectedLectures.delete(lecture.id);
+      }
+      renderSelectedLectures();
+    };
 
     return item;
   }
 
-  function renderApp() {
+  function renderSelectedLectures() {
+    renderLectures(
+      data.lectures.filter(lecture => data.selectedLectures.has(lecture.id))
+    );
+  }
+
+  function clearWeekdayTracks() {
+    data.weekdayTrackRefs.forEach(weekdayTrackRef => {
+      while (weekdayTrackRef.lastChild) {
+        weekdayTrackRef.removeChild(weekdayTrackRef.lastChild);
+      }
+    });
+  }
+
+  function renderLectures(lectures) {
+    clearWeekdayTracks();
+
+    lectures.forEach(lecture => renderLecture(lecture));
+  }
+
+  function renderLecture(lecture) {
+    lecture.times.forEach(time =>
+      data.weekdayTrackRefs[time.weekday].appendChild(
+        createLectureCell(lecture, time)
+      )
+    );
+  }
+
+  function createLectureCell(lecture, time) {
+    const begin = parseTime(time.beginAt) - 480;
+    const end = parseTime(time.endAt) - 480;
+
+    const cell = document.createElement('div');
+    cell.classList.add('timetable__lecture-cell');
+    cell.textContent = lecture.name;
+    Object.assign(cell.style, {
+      top: `${(begin / 840) * 100}%`,
+      height: `${((end - begin) / 840) * 100}%`,
+    });
+
+    return cell;
+  }
+
+  function createApp() {
     const container = document.createElement('div');
     container.classList.add('container');
 
-    const lectureArea = document.createElement('div');
-    lectureArea.classList.add('lecture-area');
+    const searchArea = document.createElement('div');
+    searchArea.classList.add('search');
 
     const searchInput = document.createElement('input');
-    searchInput.classList.add('lecture-search');
+    data.searchInputRef = searchInput;
+    searchInput.classList.add('search__input');
     searchInput.type = 'search';
     searchInput.placeholder = 'Search lecture';
-    searchInput.oninput = () => {
-      updateLectureList();
-    };
-    lectureArea.appendChild(searchInput);
+    searchInput.oninput = () =>
+      renderSearchResultList(searchInput.value.trim());
+    searchArea.appendChild(searchInput);
 
-    const lectureList = document.createElement('ul');
-    lectureList.classList.add('lectures');
-    function updateLectureList() {
-      const query = searchInput.value.trim();
+    const searchResultList = document.createElement('ul');
+    data.searchResultListRef = searchResultList;
+    searchResultList.classList.add('search__result');
+    renderSearchResultList('');
+    searchArea.appendChild(searchResultList);
 
-      while (lectureList.lastChild) {
-        lectureList.removeChild(lectureList.lastChild);
-      }
-
-      lectures
-        .filter(lecture =>
-          lecture.name.toLowerCase().includes(query.toLowerCase())
-        )
-        .forEach(lecture => {
-          lectureList.appendChild(renderLectureItem(lecture));
-        });
-    }
-    updateLectureList();
-    lectureArea.appendChild(lectureList);
-
-    container.appendChild(lectureArea);
+    container.appendChild(searchArea);
 
     const timetable = document.createElement('div');
     timetable.classList.add('timetable');
@@ -86,11 +151,13 @@
       timetable.appendChild(weekdayHeader);
 
       const weekdayTrack = document.createElement('div');
+      data.weekdayTrackRefs.push(weekdayTrack);
       weekdayTrack.classList.add('timetable__weekday-track');
       Object.assign(weekdayTrack.style, {
         gridColumn: i + 2,
         gridRow: '2 / -1',
       });
+
       timetable.appendChild(weekdayTrack);
     });
 
@@ -113,7 +180,7 @@
   }
 
   function mount(mountNode) {
-    const app = renderApp();
+    const app = createApp();
 
     mountNode.appendChild(app);
   }

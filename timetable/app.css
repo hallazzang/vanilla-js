@@ -17,12 +17,12 @@ body {
   display: flex;
 }
 
-.lecture-area {
+.search-area {
   display: flex;
   flex-direction: column;
 }
 
-.lectures {
+.search__result {
   flex: 1;
   margin: 0;
   margin-top: 0.5rem;
@@ -31,14 +31,14 @@ body {
   overflow-y: scroll;
 }
 
-.lectures__item-container {
+.search__result-item__container {
   padding: 0.3rem;
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
 }
 
-.lectures__item-name {
+.search__result-item__name {
   font-weight: 600;
 }
 
@@ -55,4 +55,15 @@ body {
   justify-content: center;
   align-items: center;
   font-weight: 600;
+}
+
+.timetable__weekday-track {
+  position: relative;
+}
+
+.timetable__lecture-cell {
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #000;
 }
