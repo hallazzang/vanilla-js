@@ -26,7 +26,25 @@
         name: 'Lecture 3',
         times: [
           { weekday: 1, beginAt: '12:00', endAt: '14:00' },
-          { weekday: 2, beginAt: '18:30', endAt: '20:00' },
+          { weekday: 2, beginAt: '19:30', endAt: '21:00' },
+        ],
+      },
+      {
+        id: 4,
+        name: 'Lecture 4',
+        times: [{ weekday: 4, beginAt: '10:00', endAt: '12:00' }],
+      },
+      {
+        id: 5,
+        name: 'Lecture 5',
+        times: [{ weekday: 0, beginAt: '13:00', endAt: '17:00' }],
+      },
+      {
+        id: 6,
+        name: 'Lecture 6',
+        times: [
+          { weekday: 0, beginAt: '15:00', endAt: '16:30' },
+          { weekday: 2, beginAt: '09:30', endAt: '11:45' },
         ],
       },
     ],
