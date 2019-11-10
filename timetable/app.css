@@ -15,10 +15,11 @@ body {
 .container {
   height: 100%;
   display: flex;
+  flex-flow: row wrap;
 }
 
 .search {
-  flex: 0 0 300px;
+  flex: 1 300px;
   display: flex;
   flex-direction: column;
 }
@@ -49,7 +50,7 @@ body {
 }
 
 .timetable {
-  flex: 1;
+  flex: 1 400px;
   display: grid;
   grid-template-columns: 4rem repeat(5, 1fr);
   grid-template-rows: 2rem repeat(14, 1fr);
