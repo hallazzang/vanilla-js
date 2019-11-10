@@ -79,14 +79,52 @@
     item.onmouseleave = () => renderLectures([], true);
     item.onclick = () => {
       if (!data.selectedLectures.has(lecture.id)) {
-        data.selectedLectures.add(lecture.id);
+        selectLecture(lecture);
       } else {
-        data.selectedLectures.delete(lecture.id);
+        unselectLecture(lecture);
       }
-      renderSelectedLectures();
     };
 
     return item;
+  }
+
+  function selectLecture(lecture) {
+    if (
+      data.lectures
+        .filter(x => data.selectedLectures.has(x.id))
+        .some(selectedLecture => hasOverlappedTime(selectedLecture, lecture))
+    ) {
+      alert('Cannot add overlapped lectures!');
+      return;
+    }
+
+    data.selectedLectures.add(lecture.id);
+    renderSelectedLectures();
+  }
+
+  function unselectLecture(lecture) {
+    data.selectedLectures.delete(lecture.id);
+    renderSelectedLectures();
+  }
+
+  function hasOverlappedTime(lecture1, lecture2) {
+    return lecture1.times.some(a => {
+      return lecture2.times.some(b => {
+        if (a.weekday != b.weekday) {
+          return false;
+        }
+
+        const aBegin = parseTime(a.beginAt);
+        const aEnd = parseTime(a.endAt);
+        const bBegin = parseTime(b.beginAt);
+        const bEnd = parseTime(b.endAt);
+
+        return (
+          (aBegin < bBegin && aEnd > bBegin) ||
+          (bBegin < aBegin && bEnd > aBegin)
+        );
+      });
+    });
   }
 
   function renderSelectedLectures() {
