@@ -11,6 +11,22 @@
           { weekday: 3, beginAt: '12:30', endAt: '14:30' },
         ],
       },
+      {
+        id: 2,
+        name: 'Lecture 2',
+        times: [
+          { weekday: 1, beginAt: '13:00', endAt: '15:00' },
+          { weekday: 2, beginAt: '18:30', endAt: '20:00' },
+        ],
+      },
+      {
+        id: 3,
+        name: 'Lecture 3',
+        times: [
+          { weekday: 1, beginAt: '12:00', endAt: '14:00' },
+          { weekday: 2, beginAt: '18:30', endAt: '20:00' },
+        ],
+      },
     ],
     selectedLectures: new Set(),
     searchInputRef: undefined,
