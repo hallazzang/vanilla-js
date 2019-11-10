@@ -1,6 +1,8 @@
 (() => {
   const global = this;
 
+  const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
   const data = {
     lectures: [
       {
@@ -41,6 +43,14 @@
     return hour * 60 + minute;
   }
 
+  function formatTimes(times) {
+    return times
+      .map(
+        time => `${weekdayNames[time.weekday]} ${time.beginAt}-${time.endAt}`
+      )
+      .join(' / ');
+  }
+
   function renderSearchResultList() {
     const query = data.searchInputRef.value.trim();
 
@@ -71,7 +81,7 @@
 
     const lectureTimes = document.createElement('span');
     lectureTimes.classList.add('search__result-item__times');
-    lectureTimes.textContent = '-';
+    lectureTimes.textContent = formatTimes(lecture.times);
     container.appendChild(lectureTimes);
 
     item.appendChild(container);

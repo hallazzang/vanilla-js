@@ -17,9 +17,15 @@ body {
   display: flex;
 }
 
-.search-area {
+.search {
+  flex: 0 0 300px;
   display: flex;
   flex-direction: column;
+}
+
+.search__input {
+  padding: 0.3rem;
+  border: 1px solid #ccc;
 }
 
 .search__result {
