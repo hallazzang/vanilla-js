@@ -57,13 +57,20 @@ body {
   font-weight: 600;
 }
 
-.timetable__weekday-track {
+.timetable__weekday-track,
+.timetable__weekday-preview-track {
   position: relative;
 }
 
-.timetable__lecture-cell {
+.timetable__lecture-cell,
+.timetable__lecture-preview-cell {
   position: absolute;
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #000;
+  background-color: #ddd;
+}
+
+.timetable__lecture-preview-cell {
+  opacity: 0.5;
 }

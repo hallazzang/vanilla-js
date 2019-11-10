@@ -32,6 +32,7 @@
     searchInputRef: undefined,
     searchResultListRef: undefined,
     weekdayTrackRefs: [],
+    weekdayPreviewTrackRefs: [],
   };
 
   function parseTime(s) {
@@ -74,6 +75,8 @@
     container.appendChild(lectureTimes);
 
     item.appendChild(container);
+    item.onmouseenter = () => renderLectures([lecture], true);
+    item.onmouseleave = () => renderLectures([], true);
     item.onclick = () => {
       if (!data.selectedLectures.has(lecture.id)) {
         data.selectedLectures.add(lecture.id);
@@ -92,34 +95,42 @@
     );
   }
 
-  function clearWeekdayTracks() {
-    data.weekdayTrackRefs.forEach(weekdayTrackRef => {
-      while (weekdayTrackRef.lastChild) {
-        weekdayTrackRef.removeChild(weekdayTrackRef.lastChild);
+  function renderLectures(lectures, preview = false) {
+    const trackRefs = preview
+      ? data.weekdayPreviewTrackRefs
+      : data.weekdayTrackRefs;
+
+    trackRefs.forEach(trackRef => {
+      while (trackRef.lastChild) {
+        trackRef.removeChild(trackRef.lastChild);
       }
     });
+
+    lectures.forEach(lecture => renderLecture(lecture, preview));
   }
 
-  function renderLectures(lectures) {
-    clearWeekdayTracks();
+  function renderLecture(lecture, preview = false) {
+    const trackRefs = preview
+      ? data.weekdayPreviewTrackRefs
+      : data.weekdayTrackRefs;
 
-    lectures.forEach(lecture => renderLecture(lecture));
-  }
-
-  function renderLecture(lecture) {
     lecture.times.forEach(time =>
-      data.weekdayTrackRefs[time.weekday].appendChild(
-        createLectureCell(lecture, time)
+      trackRefs[time.weekday].appendChild(
+        createLectureCell(lecture, time, preview)
       )
     );
   }
 
-  function createLectureCell(lecture, time) {
+  function createLectureCell(lecture, time, preview = false) {
     const begin = parseTime(time.beginAt) - 480;
     const end = parseTime(time.endAt) - 480;
 
     const cell = document.createElement('div');
-    cell.classList.add('timetable__lecture-cell');
+    if (preview) {
+      cell.classList.add('timetable__lecture-preview-cell');
+    } else {
+      cell.classList.add('timetable__lecture-cell');
+    }
     cell.textContent = lecture.name;
     Object.assign(cell.style, {
       top: `${(begin / 840) * 100}%`,
@@ -173,8 +184,16 @@
         gridColumn: i + 2,
         gridRow: '2 / -1',
       });
-
       timetable.appendChild(weekdayTrack);
+
+      const weekdayPreviewTrack = document.createElement('div');
+      data.weekdayPreviewTrackRefs.push(weekdayPreviewTrack);
+      weekdayPreviewTrack.classList.add('timetable__weekday-preview-track');
+      Object.assign(weekdayPreviewTrack.style, {
+        gridColumn: i + 2,
+        gridRow: '2 / -1',
+      });
+      timetable.appendChild(weekdayPreviewTrack);
     });
 
     [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].forEach(
